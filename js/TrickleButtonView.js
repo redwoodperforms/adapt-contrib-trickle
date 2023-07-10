@@ -75,7 +75,7 @@ class TrickleButtonView extends ComponentView {
       'popup:closed': this.onPopupClosed
     });
     const parentModel = this.model.getParent();
-    const completionAttribute = getCompletionAttribute();
+    const completionAttribute = getCompletionAttribute(parentModel);
     this.listenTo(parentModel, {
       'change:_requireCompletionOf': this.onStepUnlocked,
       [`bubble:change:${completionAttribute}`]: this.onStepUnlocked,
@@ -121,7 +121,7 @@ class TrickleButtonView extends ComponentView {
     const isButtonDisabled = this.model.get('_isButtonDisabled');
     const $button = this.$('.js-trickle-btn');
     const $ariaLabel = this.$('.aria-label');
-    Adapt.a11y.toggleEnabled($button, !isButtonDisabled);
+    a11y.toggleEnabled($button, !isButtonDisabled);
     if (!isButtonDisabled) {
       // move focus forward if it's on the aria-label
       if (document.activeElement instanceof HTMLElement && document.activeElement.isSameNode($ariaLabel[0])) {
@@ -166,7 +166,7 @@ class TrickleButtonView extends ComponentView {
   async onParentComplete(model, value) {
     if (!value) return;
     const parentModel = this.model.getParent();
-    const completionAttribute = getCompletionAttribute();
+    const completionAttribute = getCompletionAttribute(parentModel);
     this.stopListening(parentModel, {
       [`bubble:change:${completionAttribute}`]: this.onStepUnlocked,
       [`change:${completionAttribute}`]: this.onParentComplete
